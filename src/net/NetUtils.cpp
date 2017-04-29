@@ -39,6 +39,7 @@ int setupListeners()
     for (int i=0;i<MAX_XL3_CON;i++){
       xl3s[i] = new XL3Model(i);
     }
+    tubii = new TUBIIModel();
   }
   catch(int e){
     return -1;
@@ -55,6 +56,7 @@ void signalCallback(evutil_socket_t sig, short events, void *user_data)
   }
   delete contConnection;
   delete mtc;
+  delete tubii;
   if (logFile)
     fclose(logFile);
   if (ecalLogFile)

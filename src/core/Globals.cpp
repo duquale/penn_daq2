@@ -6,6 +6,7 @@
 
 MTCModel *mtc;
 XL3Model *xl3s[MAX_XL3_CON];
+TUBIIModel *tubii;
 ControllerLink *contConnection;
 pthread_mutex_t startTestLock;
 char finalTestIDs[MAX_XL3_CON][16][500];
@@ -33,6 +34,8 @@ char FECDB_VIEWDOC[100];
 int MAX_PENDING_CONS;
 int XL3_PORT;
 int SBC_PORT;
+int TUBII_PORT;
+char TUBII_SERVER[100];
 char SBC_USER[100];
 char SBC_SERVER[100];
 int CONT_PORT;
@@ -208,6 +211,10 @@ int readConfigurationFile()
           XL3_PORT = atoi(var_value);
         }else if (strcmp(var_name,"SBC_PORT")==0){
           SBC_PORT = atoi(var_value);
+        }else if (strcmp(var_name,"TUBII_PORT")==0){
+          TUBII_PORT = atoi(var_value);
+        }else if (strcmp(var_name,"TUBII_SERVER")==0){
+          strcpy(TUBII_SERVER,var_value);
         }else if (strcmp(var_name,"SBC_USER")==0){
           strcpy(SBC_USER,var_value);
         }else if (strcmp(var_name,"SBC_SERVER")==0){

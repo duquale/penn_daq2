@@ -28,6 +28,10 @@ SBC_SERVER=10.0.0.30
 ORCA_READOUT_PATH=/etc/rc.d/orcareadout
 MTC_XILINX_LOCATION=data/mtcxilinx.rbt
 DEFAULT_SSHKEY=ssh_key
+# tubii
+TUBII_PORT=4001
+TUBII_SERVER=localhost
+#
 
 # controller
 CONT_PORT=44600

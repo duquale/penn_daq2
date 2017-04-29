@@ -35,6 +35,7 @@
 #include "DACSweep.h"
 #include "MTCCmds.h"
 #include "XL3Cmds.h"
+#include "TUBIICmds.h"
 #include "NetUtils.h"
 #include "ControllerLink.h"
 
@@ -1642,6 +1643,17 @@ void *ControllerLink::ProcessCommand(void *arg)
       if (xl3s[i]->IsConnected())
         lprintf("XL3 #%d\n",i);
     }
+  }else if (strncmp(input,"set_ecal_bit",12) == 0){
+    if (GetFlag(input,'h')){
+      lprintf("Usage: set_ecal_bit -b bit\n");
+      goto err;
+    }
+    uint32_t b = GetUInt(input, "b", 0, 1);
+    if (b != 0 && b != 1) {
+        lprintf("Arguement must be 1 or 0\n");
+        goto err;
+    }
+    SetECALBit(b);
   }
 
 err:

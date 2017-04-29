@@ -134,6 +134,7 @@ COMMAND commands[] = {
     { "start_logging", (Function *)NULL, (char *)NULL },
     { "stop_logging", (Function *)NULL, (char *)NULL },
     { "print_connected", (Function *)NULL, (char *)NULL },
+    { "set_ecal_bit", (Function *)NULL, (char *)NULL },
     //_!_end_commands_!_
     { (char *)NULL, (Function *)NULL, (char*)NULL }
 };

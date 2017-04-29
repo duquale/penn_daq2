@@ -8,11 +8,13 @@
 #include "XL3Link.h"
 #include "XL3Model.h"
 #include "MTCModel.h"
+#include "TUBIIModel.h"
 #include "ControllerLink.h"
 
 
 extern MTCModel *mtc;
 extern XL3Model *xl3s[MAX_XL3_CON];
+extern TUBIIModel *tubii;
 extern ControllerLink *contConnection;
 extern pthread_mutex_t startTestLock;
 extern struct event_base *evBase;
@@ -65,6 +67,8 @@ extern char FECDB_VIEWDOC[100];
 extern int MAX_PENDING_CONS;
 extern int XL3_PORT;
 extern int SBC_PORT;
+extern int TUBII_PORT;
+extern char TUBII_SERVER[100];
 extern char SBC_USER[100];
 extern char SBC_SERVER[100];
 extern int CONT_PORT;
