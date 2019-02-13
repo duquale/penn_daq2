@@ -528,8 +528,9 @@ int GTValidTest(uint32_t crateMask, uint32_t *slotMasks, uint32_t channelMask, f
                 json_append_member(one_chan,"tac_shift",json_mknumber((double) (tacbits[crateNum][i][j])));
                 json_append_member(one_chan,"gtvalid0",json_mknumber((double) (gtvalid_final[0][j])));
                 json_append_member(one_chan,"gtvalid1",json_mknumber((double) (gtvalid_final[1][j])));
-                // GTValid lengths too long
-                if(gtvalid_final[0][j] > gtCutoff || gtvalid_final[1][j] > gtCutoff){
+                // GTValid lengths too long or too short, FIXME GTValid short is hard-coded
+                if(gtvalid_final[0][j] > gtCutoff || gtvalid_final[1][j] > gtCutoff ||
+                   gtvalid_final[0][j] < 300.0 || gtvalid_final[1][j] < 300.0){
                   chan_errors[crateNum][i][j] = 1;
                 }
                 json_append_member(one_chan,"errors",json_mkbool(chan_errors[crateNum][i][j]));

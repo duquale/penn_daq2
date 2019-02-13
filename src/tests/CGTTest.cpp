@@ -20,7 +20,7 @@ int CGTTest(int crateNum, uint32_t slotMask, uint32_t channelMask, int updateDB,
   uint32_t result;
 
   uint32_t bundles[3];
-  int crate_id,slot_id,chan_id,nc_id,gt16_id,gt8_id,es16;
+  int crate_id,slot_id,chan_id,cell_id,nc_id,gt16_id,gt8_id,es16;
 
   int missing_bundles[16],chan_errors[16][32];
   char error_history[16][5000];
@@ -86,12 +86,14 @@ int CGTTest(int crateNum, uint32_t slotMask, uint32_t channelMask, int updateDB,
     int numgt = 0;
     // we now send out gts in bunches, checking periodically
     // that we are getting the right count at the fecs
-    for (int j=0;j<16;j++){
+    for (int j=0;j<40;j++){
       // we skip 4999 gtids then check each 5000th one
-      if (j != 13)
+      if (j < 13)
         numgt = 4999;
-      else
+      else if (j == 13)
         numgt = 534;
+      else
+        numgt = 1000+j;
 
       mtc->MultiSoftGT(numgt);
 
@@ -119,12 +121,12 @@ int CGTTest(int crateNum, uint32_t slotMask, uint32_t channelMask, int updateDB,
       args->slotMask = slotMask;
       SwapLongBlock(args,sizeof(ResetFifosArgs)/sizeof(uint32_t));
       xl3s[crateNum]->SendCommand(&packet);
-      for (int i=0;i<16;i++)
-        if ((0x1<<i) & slotMask && (max_errors[i] == 0))
+      for (int i=0;i<16;i++){
+        if ((0x1<<i) & slotMask && (max_errors[i] == 0)){
           xl3s[crateNum]->RW(GENERAL_CSR_R + FEC_SEL*i + WRITE_REG,
               (crateNum << FEC_CSR_CRATE_OFFSET),&result);
-
-
+        }
+      }
 
       // now send a single soft gt and make sure it looks good
       mtc->SoftGT();
@@ -158,6 +160,7 @@ int CGTTest(int crateNum, uint32_t slotMask, uint32_t channelMask, int updateDB,
             crate_id = (int) UNPK_CRATE_ID(bundles); 
             slot_id = (int) UNPK_BOARD_ID(bundles);
             chan_id = (int) UNPK_CHANNEL_ID(bundles);
+            cell_id = (int) UNPK_CELL_ID(bundles);
             nc_id = (int) UNPK_NC_CC(bundles);
             gt16_id = (int) UNPK_FEC_GT16_ID(bundles);
             gt8_id = (int) UNPK_FEC_GT8_ID(bundles);
@@ -184,7 +187,7 @@ int CGTTest(int crateNum, uint32_t slotMask, uint32_t channelMask, int updateDB,
               else
                 max_errors[i] = 2;
               chan_errors[i][chan_id] = 1;
-            } 
+            }
             if (nc_id != 0x0){
               sprintf(cur_msg,"NC_CC wrong for slot %d chan %u: expected %d, read %u\n",
                   i,chan_id,0,nc_id);
@@ -229,7 +232,7 @@ int CGTTest(int crateNum, uint32_t slotMask, uint32_t channelMask, int updateDB,
                   max_errors[i] = 2;
               }
               chan_errors[i][chan_id] = 1;
-            } 
+            }
             if (es16 != 0x0 && j >= 13){
               sprintf(cur_msg,"Synclear error for slot %d chan %u.\n",
                   i,chan_id);
